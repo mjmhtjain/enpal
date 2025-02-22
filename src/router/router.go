@@ -10,11 +10,8 @@ import (
 func Setup() *gin.Engine {
 	router := gin.Default()
 
-	// Initialize handlers
-	healthHandler := handlers.NewHealthHandler()
-
 	// Register routes
-	router.GET("/health", healthHandler.Check)
+	router.GET("/calendar/query", handlers.NewAppointmentHandler().Find)
 
 	return router
 }

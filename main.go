@@ -1,24 +1,15 @@
 package main
 
 import (
-	"net/http"
+	"os"
 
-	"github.com/gin-gonic/gin"
+	"github.com/mjmhtjain/enpal/src/router"
 )
 
 func main() {
-	// Create default gin router
-	router := gin.Default()
-
-	// Register health check endpoint
-	router.GET("/health", healthCheck)
+	// Setup router with all routes configured
+	router := router.Setup()
 
 	// Start the server on port 8080
-	router.Run(":8080")
-}
-
-func healthCheck(c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H{
-		"status": "healthy",
-	})
+	router.Run(":" + os.Getenv("PORT"))
 }

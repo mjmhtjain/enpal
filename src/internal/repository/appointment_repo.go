@@ -1,19 +1,19 @@
 package repository
 
 import (
-	"database/sql"
 	"log"
 
 	"github.com/mjmhtjain/enpal/src/internal/client"
 	"github.com/mjmhtjain/enpal/src/internal/model"
+	"gorm.io/gorm"
 )
 
 type IAppointmentRepo interface {
-	FindFreeSlots(startDate string) ([]model.AppointmentGroup, error)
+	FindFreeSlots(startDate string) ([]model.Slot, error)
 }
 
 type AppointmentRepo struct {
-	db *sql.DB
+	db *gorm.DB
 }
 
 func NewAppointmentRepo() IAppointmentRepo {
@@ -27,35 +27,15 @@ func NewAppointmentRepo() IAppointmentRepo {
 	}
 }
 
-func (a *AppointmentRepo) FindFreeSlots(startDate string) ([]model.AppointmentGroup, error) {
-	result := []model.AppointmentGroup{}
+func (a *AppointmentRepo) FindFreeSlots(startDate string) ([]model.Slot, error) {
+	var slots []model.Slot
 
-	query := `
-		SELECT sa.id, COUNT(*) as count_slots from "slots" sl
-	INNER JOIN "sales_managers" sa
-	ON sl.sales_manager_id = sa.id
-	where sl.booked = 'false' AND
-	DATE(sl.start_date) = $1 
-	GROUP BY sa.id
-	`
-	rows, err := a.db.Query(query, startDate)
+	err := a.db.Preload("SalesManager").
+		Where("booked = ? AND DATE(start_date) = ?", false, startDate).
+		Find(&slots).Error
 	if err != nil {
 		return nil, err
 	}
 
-	for rows.Next() {
-		var appGrp model.AppointmentGroup
-
-		err := rows.Scan(
-			&appGrp.ID,
-			&appGrp.Count,
-		)
-		if err != nil {
-			return nil, err
-		}
-
-		result = append(result, appGrp)
-	}
-
-	return result, err
+	return slots, nil
 }

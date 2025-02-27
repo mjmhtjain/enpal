@@ -1,10 +1,11 @@
 package handlers
 
 import (
+	"encoding/json"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/mjmhtjain/enpal/src/internal/domain"
+	"github.com/mjmhtjain/enpal/src/internal/dto"
 	"github.com/mjmhtjain/enpal/src/internal/repository"
 	"github.com/mjmhtjain/enpal/src/internal/service"
 )
@@ -26,13 +27,31 @@ func NewAppointmentHandler() *AppointmentHandler {
 
 // Find finds all the appointment opening
 func (h *AppointmentHandler) Find(c *gin.Context) {
-	res, err := h.appointmentService.FindFreeSlots(domain.CalendarQueryDomain{})
+	var calendarQueryBody dto.CalendarQueryRequestBody
+	err := json.NewDecoder(c.Request.Body).Decode(&calendarQueryBody)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
+
+		return
+	}
+
+	calendarQueryObj, err := calendarQueryBody.GetDomainObject()
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
+
+		return
+	}
+
+	res, err := h.appointmentService.FindFreeSlots(calendarQueryObj)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
-			"status": http.StatusInternalServerError,
-			"error":  err.Error(),
+			"error": err.Error(),
 		})
-		return // Add return statement to prevent executing the next line after error
+		return
 	}
 
 	c.JSON(http.StatusOK, res)

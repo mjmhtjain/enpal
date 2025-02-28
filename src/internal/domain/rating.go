@@ -22,3 +22,7 @@ func (l *Rating) GetRating(val string) (Rating, error) {
 		return "", errors.New("invalid rating")
 	}
 }
+
+func (l *Rating) ToString() string {
+	return string(*l)
+}

@@ -19,3 +19,7 @@ func (l *Language) GetLanguage(lang string) (Language, error) {
 		return "", errors.New("invalid language")
 	}
 }
+
+func (l *Language) ToString() string {
+	return string(*l)
+}

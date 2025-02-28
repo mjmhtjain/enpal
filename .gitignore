@@ -27,3 +27,5 @@ go.work.sum
 # launch.json
 .vscode/*
 
+# mockery
+.mockery.yaml

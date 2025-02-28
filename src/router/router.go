@@ -11,7 +11,7 @@ func Setup() *gin.Engine {
 	router := gin.Default()
 
 	// Register routes
-	router.GET("/calendar/query", handlers.NewAppointmentHandler().Find)
+	router.POST("/calendar/query", handlers.NewAppointmentHandler().Find)
 
 	return router
 }

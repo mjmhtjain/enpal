@@ -1,7 +1,6 @@
 package service
 
 import (
-	"encoding/json"
 	"slices"
 	"time"
 
@@ -35,17 +34,8 @@ func (s *AppointmentService) FindFreeSlots(calQuery domain.CalendarQueryDomain) 
 	grp := map[time.Time]int{} // time:count
 
 	for _, s := range slots {
-		var langArr []string
-		err := json.Unmarshal([]byte(s.SalesManager.Languages), &langArr)
-		if err != nil {
-			return nil, err
-		}
-
-		var ratingArr []string
-		err = json.Unmarshal([]byte(s.SalesManager.CustomerRatings), &ratingArr)
-		if err != nil {
-			return nil, err
-		}
+		langArr := []string(s.SalesManager.Languages)
+		ratingArr := []string(s.SalesManager.CustomerRatings)
 
 		if !slices.Contains(langArr, calQuery.Language.ToString()) {
 			continue

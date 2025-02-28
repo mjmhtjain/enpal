@@ -4,6 +4,7 @@ import (
 	"testing"
 	"time"
 
+	"github.com/lib/pq"
 	"github.com/mjmhtjain/enpal/src/internal/domain"
 	"github.com/mjmhtjain/enpal/src/internal/mocks"
 	"github.com/mjmhtjain/enpal/src/internal/model"
@@ -29,8 +30,8 @@ func TestAppointmentService_FindFreeSlots(t *testing.T) {
 				EndDate:   now.Add(30 * time.Minute),
 				SalesManager: model.SalesManager{
 					ID:              1,
-					Languages:       `["English", "German"]`,
-					CustomerRatings: `["Gold", "Bronze"]`,
+					Languages:       pq.StringArray{"English", "German"},
+					CustomerRatings: pq.StringArray{"Gold", "Bronze"},
 				},
 			},
 			{
@@ -39,8 +40,8 @@ func TestAppointmentService_FindFreeSlots(t *testing.T) {
 				EndDate:   now.Add(30 * time.Minute),
 				SalesManager: model.SalesManager{
 					ID:              2,
-					Languages:       `["English"]`,
-					CustomerRatings: `["Gold"]`,
+					Languages:       pq.StringArray{"English"},
+					CustomerRatings: pq.StringArray{"Gold"},
 				},
 			},
 			{
@@ -49,8 +50,8 @@ func TestAppointmentService_FindFreeSlots(t *testing.T) {
 				EndDate:   later.Add(30 * time.Minute),
 				SalesManager: model.SalesManager{
 					ID:              3,
-					Languages:       `["German"]`,
-					CustomerRatings: `["Gold"]`,
+					Languages:       pq.StringArray{"German"},
+					CustomerRatings: pq.StringArray{"Gold"},
 				},
 			},
 			{
@@ -59,8 +60,8 @@ func TestAppointmentService_FindFreeSlots(t *testing.T) {
 				EndDate:   later.Add(30 * time.Minute),
 				SalesManager: model.SalesManager{
 					ID:              4,
-					Languages:       `["English"]`,
-					CustomerRatings: `["Bronze"]`, // Different rating
+					Languages:       pq.StringArray{"English"},
+					CustomerRatings: pq.StringArray{"Bronze"}, // Different rating
 				},
 			},
 		}
@@ -172,8 +173,8 @@ func TestAppointmentService_FindFreeSlots(t *testing.T) {
 				EndDate:   now.Add(30 * time.Minute),
 				SalesManager: model.SalesManager{
 					ID:              1,
-					Languages:       `["German", "Spanish"]`, // No English language support
-					CustomerRatings: `["Gold"]`,
+					Languages:       pq.StringArray{"German", "Spanish"}, // No English language support
+					CustomerRatings: pq.StringArray{"Gold"},
 				},
 			},
 			{
@@ -182,8 +183,8 @@ func TestAppointmentService_FindFreeSlots(t *testing.T) {
 				EndDate:   now.Add(90 * time.Minute),
 				SalesManager: model.SalesManager{
 					ID:              2,
-					Languages:       `["English"]`,
-					CustomerRatings: `["Silver"]`, // No Gold rating
+					Languages:       pq.StringArray{"English"},
+					CustomerRatings: pq.StringArray{"Silver"}, // No Gold rating
 				},
 			},
 		}

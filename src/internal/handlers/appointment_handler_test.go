@@ -26,7 +26,7 @@ func TestFindHandler(t *testing.T) {
 
 		calendarQuery := dto.CalendarQueryRequestBody{
 			Date:     "2023-01-01",
-			Products: `["SolarPanels", "Heatpumps"]`,
+			Products: []string{"SolarPanels", "Heatpumps"},
 			Language: "German",
 			Rating:   "Bronze",
 		}
@@ -52,7 +52,7 @@ func TestFindHandler(t *testing.T) {
 
 		calendarQuery := dto.CalendarQueryRequestBody{
 			Date:     "01-01-2023", // Invalid date format, should be YYYY-MM-DD
-			Products: `["SolarPanels", "Heatpumps"]`,
+			Products: []string{"SolarPanels", "Heatpumps"},
 			Language: "German",
 			Rating:   "Bronze",
 		}
@@ -76,7 +76,7 @@ func TestFindHandler(t *testing.T) {
 
 		calendarQuery := dto.CalendarQueryRequestBody{
 			Date:     "2023-01-01",
-			Products: `["InvalidProduct"]`, // Product not supported
+			Products: []string{"InvalidProduct"}, // Product not supported
 			Language: "German",
 			Rating:   "Bronze",
 		}
@@ -92,7 +92,7 @@ func TestFindHandler(t *testing.T) {
 		assert.Equal(t, http.StatusBadRequest, w.Code)
 	})
 
-	t.Run("malformed product JSON", func(t *testing.T) {
+	t.Run("empty product", func(t *testing.T) {
 		mockService := mocks.NewAppointmentService(t)
 		handler := &handlers.AppointmentHandler{
 			AppointmentService: mockService,
@@ -100,7 +100,7 @@ func TestFindHandler(t *testing.T) {
 
 		calendarQuery := dto.CalendarQueryRequestBody{
 			Date:     "2023-01-01",
-			Products: `[SolarPanels]`, // Malformed JSON
+			Products: []string{}, // Malformed JSON
 			Language: "German",
 			Rating:   "Bronze",
 		}
@@ -124,7 +124,7 @@ func TestFindHandler(t *testing.T) {
 
 		calendarQuery := dto.CalendarQueryRequestBody{
 			Date:     "2023-01-01",
-			Products: `["SolarPanels", "Heatpumps"]`,
+			Products: []string{"SolarPanels", "Heatpumps"},
 			Language: "InvalidLanguage", // Unsupported language
 			Rating:   "Bronze",
 		}
@@ -148,7 +148,7 @@ func TestFindHandler(t *testing.T) {
 
 		calendarQuery := dto.CalendarQueryRequestBody{
 			Date:     "2023-01-01",
-			Products: `["SolarPanels", "Heatpumps"]`,
+			Products: []string{"SolarPanels", "Heatpumps"},
 			Language: "German",
 			Rating:   "InvalidRating", // Unsupported rating
 		}
@@ -172,7 +172,7 @@ func TestFindHandler(t *testing.T) {
 
 		calendarQuery := dto.CalendarQueryRequestBody{
 			Date:     "2023-01-01",
-			Products: `["SolarPanels", "Heatpumps"]`,
+			Products: []string{"SolarPanels", "Heatpumps"},
 			Language: "German",
 			Rating:   "Bronze",
 		}
@@ -199,7 +199,7 @@ func TestFindHandler(t *testing.T) {
 
 		calendarQuery := dto.CalendarQueryRequestBody{
 			// Missing Date
-			Products: `["SolarPanels", "Heatpumps"]`,
+			Products: []string{"SolarPanels", "Heatpumps"},
 			Language: "German",
 			Rating:   "Bronze",
 		}

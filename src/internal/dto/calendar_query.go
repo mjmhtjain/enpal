@@ -1,7 +1,6 @@
 package dto
 
 import (
-	"encoding/json"
 	"errors"
 	"time"
 
@@ -9,10 +8,10 @@ import (
 )
 
 type CalendarQueryRequestBody struct {
-	Date     string `json:"date"`
-	Products string `json:"products"`
-	Language string `json:"language"`
-	Rating   string `json:"rating"`
+	Date     string   `json:"date"`
+	Products []string `json:"products"`
+	Language string   `json:"language"`
+	Rating   string   `json:"rating"`
 }
 
 func (c *CalendarQueryRequestBody) parseDate() (string, error) {
@@ -25,24 +24,24 @@ func (c *CalendarQueryRequestBody) parseDate() (string, error) {
 }
 
 func (c *CalendarQueryRequestBody) parseProducts() ([]domain.Product, error) {
-	var productValues []string
+	// var productValues []string
 	productArr := []domain.Product{}
 
 	// unmarshal the values
-	err := json.Unmarshal([]byte(c.Products), &productValues)
-	if err != nil {
-		return nil, errors.New("bad products")
-	}
+	// err := json.Unmarshal([]byte(c.Products), &productValues)
+	// if err != nil {
+	// 	return nil, errors.New("bad products")
+	// }
 
 	// check for empty values
-	if len(productValues) == 0 {
+	if len(c.Products) == 0 {
 		return nil, errors.New("no products")
 	}
 
 	// remove duplicates and identify valid values
 	validProductMap := domain.GetValidProductsMap()
 
-	for _, p := range productValues {
+	for _, p := range c.Products {
 		val := domain.Product(p)
 		if _, exists := validProductMap[val]; exists {
 			validProductMap[val] = true

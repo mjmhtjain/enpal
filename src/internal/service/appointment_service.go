@@ -26,8 +26,7 @@ func NewAppointmentService(appointmentRepo repository.IAppointmentRepo) *Appoint
 
 func (s *AppointmentService) FindFreeSlots(calQuery domain.CalendarQueryDomain) ([]dto.CalendarQueryResponse, error) {
 	response := []dto.CalendarQueryResponse{}
-	// filteredSlots := []model.Slot{}
-	slots, err := s.appointmentRepo.FindFreeSlots("")
+	slots, err := s.appointmentRepo.FindFreeSlots(calQuery.Date)
 	if err != nil {
 		return nil, err
 	}
@@ -37,12 +36,16 @@ func (s *AppointmentService) FindFreeSlots(calQuery domain.CalendarQueryDomain) 
 
 	for _, s := range slots {
 		var langArr []string
-		langBytes, _ := json.Marshal(s.SalesManager.Languages)
-		json.Unmarshal(langBytes, &langArr)
+		err := json.Unmarshal([]byte(s.SalesManager.Languages), &langArr)
+		if err != nil {
+			return nil, err
+		}
 
 		var ratingArr []string
-		ratingbytes, _ := json.Marshal(s.SalesManager.CustomerRatings)
-		json.Unmarshal(ratingbytes, &ratingArr)
+		err = json.Unmarshal([]byte(s.SalesManager.CustomerRatings), &ratingArr)
+		if err != nil {
+			return nil, err
+		}
 
 		if !slices.Contains(langArr, calQuery.Language.ToString()) {
 			continue

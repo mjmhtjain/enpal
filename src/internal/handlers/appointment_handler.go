@@ -12,7 +12,7 @@ import (
 
 // AppointmentHandler handles health check related endpoints
 type AppointmentHandler struct {
-	appointmentService service.IAppointmentService
+	AppointmentService service.IAppointmentService
 }
 
 // NewAppointmentHandler creates a new instance of AppointmentHandler
@@ -21,7 +21,7 @@ func NewAppointmentHandler() *AppointmentHandler {
 	appointmentService := service.NewAppointmentService(appointmentRepo)
 
 	return &AppointmentHandler{
-		appointmentService: appointmentService,
+		AppointmentService: appointmentService,
 	}
 }
 
@@ -46,7 +46,7 @@ func (h *AppointmentHandler) Find(c *gin.Context) {
 		return
 	}
 
-	res, err := h.appointmentService.FindFreeSlots(calendarQueryObj)
+	res, err := h.AppointmentService.FindFreeSlots(calendarQueryObj)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"error": err.Error(),

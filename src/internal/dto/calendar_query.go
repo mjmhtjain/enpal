@@ -16,7 +16,7 @@ type CalendarQueryRequestBody struct {
 }
 
 func (c *CalendarQueryRequestBody) parseDate() (string, error) {
-	t, err := time.Parse(time.RFC3339, c.Date)
+	t, err := time.Parse(time.DateOnly, c.Date)
 	if err != nil {
 		return "", errors.New("bad date format")
 	}
@@ -61,27 +61,11 @@ func (c *CalendarQueryRequestBody) parseProducts() ([]domain.Product, error) {
 }
 
 func (c *CalendarQueryRequestBody) parseLanguage() (domain.Language, error) {
-	var languageVal string
-
-	// unmarshal the values
-	err := json.Unmarshal([]byte(c.Language), &languageVal)
-	if err != nil {
-		return "", errors.New("bad language value")
-	}
-
-	return new(domain.Language).GetLanguage(languageVal)
+	return new(domain.Language).GetLanguage(c.Language)
 }
 
 func (c *CalendarQueryRequestBody) parseRating() (domain.Rating, error) {
-	var ratingVal string
-
-	// unmarshal the values
-	err := json.Unmarshal([]byte(c.Rating), &ratingVal)
-	if err != nil {
-		return "", errors.New("bad rating value")
-	}
-
-	return new(domain.Rating).GetRating(ratingVal)
+	return new(domain.Rating).GetRating(c.Rating)
 }
 
 // GetDomain validates all the body fields and generates a domain object, otherwise returns an error

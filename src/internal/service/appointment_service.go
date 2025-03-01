@@ -7,6 +7,7 @@ import (
 	"github.com/mjmhtjain/enpal/src/internal/domain"
 	"github.com/mjmhtjain/enpal/src/internal/dto"
 	"github.com/mjmhtjain/enpal/src/internal/repository"
+	"github.com/mjmhtjain/enpal/src/internal/util"
 )
 
 type IAppointmentService interface {
@@ -33,16 +34,32 @@ func (s *AppointmentService) FindFreeSlots(calQuery domain.CalendarQueryDomain) 
 	// filter the slots based on sales_manager language and rating
 	grp := map[time.Time]int{} // time:count
 
+outerloop:
 	for _, s := range slots {
 		langArr := []string(s.SalesManager.Languages)
 		ratingArr := []string(s.SalesManager.CustomerRatings)
+		productArr := []string(s.SalesManager.Products)
 
+		// check for language
 		if !slices.Contains(langArr, calQuery.Language.ToString()) {
 			continue
 		}
 
+		// check for ratings
 		if !slices.Contains(ratingArr, calQuery.Rating.ToString()) {
 			continue
+		}
+
+		// check for products
+		productMap := map[string]bool{}
+		for _, p := range productArr {
+			productMap[p] = true
+		}
+
+		for _, p := range calQuery.Products {
+			if _, ex := productMap[p.ToString()]; !ex {
+				continue outerloop
+			}
 		}
 
 		// group these slots based on starttime
@@ -57,7 +74,7 @@ func (s *AppointmentService) FindFreeSlots(calQuery domain.CalendarQueryDomain) 
 	for k, v := range grp {
 		response = append(response, dto.CalendarQueryResponse{
 			AvailableCount: v,
-			StartDate:      k.Format(time.RFC3339),
+			StartDate:      util.UniversalTimeFormat(k),
 		})
 	}
 

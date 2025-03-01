@@ -8,6 +8,7 @@ import (
 	"github.com/mjmhtjain/enpal/src/internal/domain"
 	"github.com/mjmhtjain/enpal/src/internal/mocks"
 	"github.com/mjmhtjain/enpal/src/internal/model"
+	"github.com/mjmhtjain/enpal/src/internal/util"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
@@ -30,6 +31,7 @@ func TestAppointmentService_FindFreeSlots(t *testing.T) {
 				EndDate:   now.Add(30 * time.Minute),
 				SalesManager: model.SalesManager{
 					ID:              1,
+					Products:        pq.StringArray{"SolarPanels", "Heatpumps"},
 					Languages:       pq.StringArray{"English", "German"},
 					CustomerRatings: pq.StringArray{"Gold", "Bronze"},
 				},
@@ -60,6 +62,7 @@ func TestAppointmentService_FindFreeSlots(t *testing.T) {
 				EndDate:   later.Add(30 * time.Minute),
 				SalesManager: model.SalesManager{
 					ID:              4,
+					Products:        pq.StringArray{"SolarPanels", "Heatpumps"},
 					Languages:       pq.StringArray{"English"},
 					CustomerRatings: pq.StringArray{"Bronze"}, // Different rating
 				},
@@ -94,10 +97,10 @@ func TestAppointmentService_FindFreeSlots(t *testing.T) {
 		}
 
 		// 1 slots at the current time match criteria (English + Bronze)
-		assert.Equal(t, 1, timeMap[now.Format(time.RFC3339)])
+		assert.Equal(t, 1, timeMap[util.UniversalTimeFormat(now)])
 
 		// 1 slots at the later time match criteria (English + Bronze)
-		assert.Equal(t, 1, timeMap[later.Format(time.RFC3339)])
+		assert.Equal(t, 1, timeMap[util.UniversalTimeFormat(later)])
 
 		// Verify mock expectations were met
 		mockRepo.AssertExpectations(t)

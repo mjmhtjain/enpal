@@ -5,7 +5,7 @@ import (
 )
 
 type SalesManager struct {
-	ID              uint           `gorm:"primaryKey"`
+	ID              int            `gorm:"primaryKey"`
 	Name            string         `gorm:"column:name;not null"`
 	Languages       pq.StringArray `gorm:"column:languages;type:varchar[]"`
 	Products        pq.StringArray `gorm:"column:products;type:varchar[]"`

@@ -110,8 +110,6 @@ outerloop:
 					continue outerloop
 				}
 			}
-		} else {
-			// there are no overlapping slots for this sales manager
 		}
 
 		// group these slots based on starttime

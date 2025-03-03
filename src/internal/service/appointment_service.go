@@ -43,8 +43,8 @@ func (a *AppointmentService) FindFreeSlots(calQuery domain.CalendarQueryDomain) 
 	// filter the slots based on sales_manager language and rating
 	grp := map[time.Time]int{} // time:count
 
+	// create a map of booked slots for the same sales manager
 	for _, s := range slots {
-		// create a map of booked slots for the same sales manager
 		if s.Booked {
 			if bs, ex := bookedSlots[s.SalesManager.ID]; ex {
 				bs = append(bs, s)

@@ -15,3 +15,7 @@ func GetValidProductsMap() map[Product]bool {
 
 	return validProductMap
 }
+
+func (l *Product) ToString() string {
+	return string(*l)
+}

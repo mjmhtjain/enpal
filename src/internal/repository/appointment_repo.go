@@ -9,7 +9,7 @@ import (
 )
 
 type IAppointmentRepo interface {
-	FindFreeSlots(startDate string) ([]model.Slot, error)
+	FindSlots(startDate string) ([]model.Slot, error)
 }
 
 type AppointmentRepo struct {
@@ -27,11 +27,11 @@ func NewAppointmentRepo() IAppointmentRepo {
 	}
 }
 
-func (a *AppointmentRepo) FindFreeSlots(startDate string) ([]model.Slot, error) {
+func (a *AppointmentRepo) FindSlots(startDate string) ([]model.Slot, error) {
 	var slots []model.Slot
 
 	err := a.db.Preload("SalesManager").
-		Where("booked = ? AND DATE(start_date) = ?", false, startDate).
+		Where("DATE(start_date) = ?", startDate).
 		Find(&slots).Error
 	if err != nil {
 		return nil, err

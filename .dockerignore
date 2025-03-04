@@ -1,0 +1,12 @@
+# Go specific
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Docker
+docker-compose.yml
+
+# Test files
+testdata/

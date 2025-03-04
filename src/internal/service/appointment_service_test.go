@@ -70,7 +70,7 @@ func TestAppointmentService_FindFreeSlots(t *testing.T) {
 		}
 
 		// Set up mock expectations
-		mockRepo.On("FindFreeSlots", mock.Anything).Return(slots, nil)
+		mockRepo.On("FindSlots", mock.Anything).Return(slots, nil)
 
 		// Query parameters
 		query := domain.CalendarQueryDomain{
@@ -113,7 +113,7 @@ func TestAppointmentService_FindFreeSlots(t *testing.T) {
 
 		// Set up mock to return an error
 		expectedError := assert.AnError
-		mockRepo.On("FindFreeSlots", mock.Anything).Return(nil, expectedError)
+		mockRepo.On("FindSlots", mock.Anything).Return(nil, expectedError)
 
 		// Query parameters
 		query := domain.CalendarQueryDomain{
@@ -141,7 +141,7 @@ func TestAppointmentService_FindFreeSlots(t *testing.T) {
 		service := NewAppointmentService(mockRepo)
 
 		// Set up mock to return empty slots
-		mockRepo.On("FindFreeSlots", mock.Anything).Return([]model.Slot{}, nil)
+		mockRepo.On("FindSlots", mock.Anything).Return([]model.Slot{}, nil)
 
 		// Query parameters
 		query := domain.CalendarQueryDomain{
@@ -193,7 +193,7 @@ func TestAppointmentService_FindFreeSlots(t *testing.T) {
 		}
 
 		// Set up mock expectations
-		mockRepo.On("FindFreeSlots", mock.Anything).Return(slots, nil)
+		mockRepo.On("FindSlots", mock.Anything).Return(slots, nil)
 
 		// Query for criteria that won't match any available slots
 		query := domain.CalendarQueryDomain{

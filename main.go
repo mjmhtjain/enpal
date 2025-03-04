@@ -10,6 +10,6 @@ func main() {
 	// Setup router with all routes configured
 	router := router.Setup()
 
-	// Start the server on port 8080
+	// Start the server on port
 	router.Run(":" + os.Getenv("PORT"))
 }

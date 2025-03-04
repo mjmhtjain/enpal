@@ -18,7 +18,6 @@ go mod download
 ```bash
 make dev
 ```
-The server will start on `localhost:8080` by default.
 
 ### Using Docker
 1. Build the Docker image:
@@ -30,6 +29,7 @@ make docker-build
 ```bash
 make docker-run
 ```
+The server will start on `localhost:3000` by default.
 
 3. Stop the Docker containers:
 ```bash

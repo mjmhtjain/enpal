@@ -1,0 +1,29 @@
+services:
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - PORT=3000
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_USER=postgres
+      - DB_PASSWORD=mypassword123!
+      - DB_NAME=coding-challenge
+    depends_on:
+      - db
+
+  db:
+    build: ./database
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB=coding-challenge
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=mypassword123!
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
+
+volumes:
+  postgres_data: 

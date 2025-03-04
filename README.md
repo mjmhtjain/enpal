@@ -1,5 +1,5 @@
-mockery --name=IAppointmentService \
---dir=src/internal/service \
+mockery --name=IAppointmentRepo \
+--dir=src/internal/repository \
 --output=src/internal/mocks \
---structname=AppointmentService
+--structname=AppointmentRepo
 
